@@ -2,7 +2,7 @@
 tree-handler is a module to easily manipulate tree structures.
 ## API
 ### Parse tree
-```ts
+```js
 import treeHandler from "tree-handler";
 const model = {
   id: "root",
@@ -20,33 +20,33 @@ Node tree.findOne((node) => node.model.id === "A");
 ```
 
 ### Find many nodes that match a criteria
-```ts
-const node = tree.find((node) => node.model.type === "cake")
+```js
+Array<Node> tree.find((node) => node.model.type === "cake")
 ```
 
 ### Add a new node as an object
-```ts
-const node = tree.addChild({id:"123", type:"chocolate", children:[]})
+```js
+Node tree.addChild({id:"123", type:"chocolate", children:[]})
 ```
 
 ### Add a new node as a node
-```ts
+```js
 const newNode = treeHandler.parse({
   id: "123",
   type: "chocolate",
   children: []
 });
-tree.addChild(newNode);
+Node tree.addChild(newNode);
 ```
 
 ### Delete a node
-```ts
+```js
 const node = tree.findOne((node) => node.model.id === "A");
-node.delete();
+Node node.delete();
 ```
 
 ### Move a node under a new parent
-```ts
+```js
 const modelA = {
   id: "A",
   children: [
@@ -63,7 +63,7 @@ const modelA = {
 
 const tree = treeHandler.parse(modelA);
 
-tree.moveUnderParnet({
+Node tree.moveUnderParnet({
   node: (node) => node.model.id === "B1",
   toParent: (node) => node.model.id === "C",
   atIndex:1
@@ -71,8 +71,8 @@ tree.moveUnderParnet({
 ```
 
 ### Move a node next to a sibling
-```ts
-tree.moveToSibling({
+```js
+Node tree.moveToSibling({
   node: (node) => node.model.id === "B1",
   toSibling: (node) => node.model.id === "C2",
   at: "BEFORE" // options: BEFORE, AFTER
