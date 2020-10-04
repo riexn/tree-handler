@@ -1,0 +1,19 @@
+{
+  "name": "tree-handler",
+  "description": "module to manipulate tree structures",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "author": "riexn <riexn.dev@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf ./dist && tsc",
+    "test": "jest --config jestconfig.json",
+    "prepare": "yarn build"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.14",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.4.0",
+    "typescript": "^4.0.3"
+  }
+}
