@@ -134,7 +134,7 @@ export class TreeNode<T extends TreeModel> {
       } else {
         this._addAsLastChild(child);
       }
-    } else if ((child as TreeModel).children instanceof Array) {
+    } else if (child.children instanceof Array) {
       const node = treeHandler.parse(child);
       this.addChild(node, index);
     } else {
