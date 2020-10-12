@@ -1,6 +1,8 @@
+[![NPM](https://nodei.co/npm/tree-handler.png)](https://nodei.co/npm/tree-handler/)\
 [![Build Status](https://travis-ci.org/riexn/tree-handler.svg?branch=main)](https://travis-ci.org/riexn/tree-handler)
 [![codecov](https://codecov.io/gh/riexn/tree-handler/branch/main/graph/badge.svg)](https://codecov.io/gh/riexn/tree-handler)
 [![npm version](https://badge.fury.io/js/tree-handler.svg)](https://badge.fury.io/js/tree-handler)
+
 # Tree Handler
 tree-handler is a module to easily manipulate tree structures.
 ## API
