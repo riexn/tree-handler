@@ -8,11 +8,26 @@ import { clamp } from './utils';
 import treeHandler from './treeHandler';
 
 export class TreeNode<T extends TreeModel> {
-  model: T = {} as T;
+  private _model: T = {} as T;
   parent: TreeNode<T> | undefined = undefined;
   children: TreeNode<T>[] = [];
   constructor(model: T) {
     this.model = model;
+  }
+
+  set model(newModel: Omit<T, 'children'>) {
+    // ommit changing the children if there is values in the model already
+    const isNew = Object.keys(this._model).length === 0;
+    if (isNew) {
+      this._model = newModel as T;
+    } else {
+      delete newModel.children;
+      Object.assign(this._model, newModel);
+    }
+  }
+
+  get model() {
+    return this._model;
   }
 
   public isRoot(): boolean {
