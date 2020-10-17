@@ -12,22 +12,26 @@ export class TreeNode<T extends TreeModel> {
   parent: TreeNode<T> | undefined = undefined;
   children: TreeNode<T>[] = [];
   constructor(model: T) {
+    if (!model.children) {
+      model.children = [];
+    }
     this.model = model;
   }
 
-  set model(newModel: Omit<T, 'children'>) {
+  set model(newModel: T) {
     // ommit changing the children if there is values in the model already
     const isNew = Object.keys(this._model).length === 0;
     if (isNew) {
       this._model = newModel as T;
     } else {
-      delete newModel.children;
-      Object.assign(this._model, newModel);
+      const updatedModel = newModel as any;
+      delete updatedModel.children;
+      Object.assign(this._model, updatedModel);
     }
   }
 
   get model() {
-    return this._model;
+    return this._model as T;
   }
 
   public isRoot(): boolean {
@@ -109,7 +113,7 @@ export class TreeNode<T extends TreeModel> {
       );
     }
 
-    if (siblingNode.isRoot()) {
+    if (!siblingNode.parent) {
       throw Error('The root node cannot be a sibling');
     }
 
@@ -117,10 +121,10 @@ export class TreeNode<T extends TreeModel> {
     const srcNewIndex = clamp(
       at === 'BEFORE' ? siblingIndex : siblingIndex + 1,
       0,
-      siblingNode.parent?.children.length!
+      siblingNode.parent.children.length!
     );
     srcNode.delete();
-    siblingNode.parent?.addChild(srcNode, srcNewIndex);
+    siblingNode.parent.addChild(srcNode, srcNewIndex);
   }
 
   public delete(): any {

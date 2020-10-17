@@ -9,13 +9,13 @@ class TreeHandler {
     const node = new TreeNode(model);
 
     // check it if has children
-    if (model.hasOwnProperty('children')) {
+    if (model.children && Array.isArray(model.children)) {
       // 'parse' each child, adding it as s child for this one
       model.children.map((child) => {
         this.addNodeToChild(node, this.parse(child));
       });
     } else {
-      throw Error('Each node must contain a children property of type array');
+      throw Error('Children property must be of type Array');
     }
 
     return node;

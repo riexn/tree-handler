@@ -2,7 +2,7 @@ import treeHandler from '../src/index';
 
 describe('Node Model Update', () => {
   it('should update the node model without breaking reference', () => {
-    const modelA = {
+    const modelA: any = {
       id: 'A',
       fruit: 'apple',
       children: [
@@ -50,7 +50,7 @@ describe('Node Model Update', () => {
     };
     const tree = treeHandler.parse(modelA);
     const node = tree.findOne((node) => node.model.fruit === 'cucumber');
-    node!.model = { id: 'C', fruit: 'banana', children: [] } as any;
+    node!.model = { id: 'C', fruit: 'banana' } as any;
     expect(tree.model).toStrictEqual(modelAUpdated);
   });
 });
