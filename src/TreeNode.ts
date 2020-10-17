@@ -24,7 +24,7 @@ export class TreeNode<T extends TreeModel> {
     if (isNew) {
       this._model = newModel as T;
     } else {
-      const updatedModel = newModel as any;
+      const updatedModel: any = { ...newModel };
       delete updatedModel.children;
       Object.assign(this._model, updatedModel);
     }
