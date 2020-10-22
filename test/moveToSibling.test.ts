@@ -394,4 +394,33 @@ describe('move to sibling', () => {
       });
     }).toThrow(`The root node cannot be a sibling`);
   });
+
+  it('should have the new parent after being moved', () => {
+    const modelA = {
+      id: 'A',
+      children: [
+        { id: 'B', children: [{ id: 'B1', children: [] }] },
+        {
+          id: 'C',
+          children: [
+            { id: 'C1', children: [] },
+            { id: 'C2', children: [] },
+            { id: 'C3', children: [] },
+          ],
+        },
+      ],
+    };
+
+    const tree = treeHandler.parse(modelA);
+
+    tree.moveToSibling({
+      node: (node) => node.model.id === 'B1',
+      toSibling: (node) => node.model.id === 'C3',
+      at: 'AFTER',
+    });
+
+    const node = tree.findOne((node) => node.model.id === 'B1');
+
+    expect(node?.parent).not.toStrictEqual(undefined);
+  });
 });

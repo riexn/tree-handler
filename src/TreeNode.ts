@@ -124,7 +124,7 @@ export class TreeNode<T extends TreeModel> {
       siblingNode.parent.children.length!
     );
     srcNode.delete();
-    siblingNode.parent.addChild(srcNode, srcNewIndex);
+    siblingNode.parent.addChild(srcNode.model, srcNewIndex);
   }
 
   public delete(): any {
@@ -177,7 +177,7 @@ export class TreeNode<T extends TreeModel> {
     if (indexOutsideRange) {
       throw Error("the specified index is outside the node's children range");
     }
-
+    child.parent = this;
     this.model.children.splice(index, 0, child.model);
     this.children.splice(index, 0, child);
   }
