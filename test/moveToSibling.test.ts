@@ -285,6 +285,123 @@ describe('move to sibling', () => {
     expect(tree.model).toStrictEqual(modelAMoved);
   });
 
+  it('should move between siblings of the same array', () => {
+    const sample = {
+      id: 'A',
+      children: [
+        { id: 'B', children: [{ id: 'B1', children: [] }] },
+        {
+          id: 'C',
+          children: [
+            { id: 'C1', children: [] },
+            { id: 'C2', children: [] },
+            { id: 'C3', children: [] },
+          ],
+        },
+      ],
+    };
+
+    const sampleTargetA = {
+      id: 'A',
+      children: [
+        { id: 'B', children: [{ id: 'B1', children: [] }] },
+        {
+          id: 'C',
+          children: [
+            { id: 'C2', children: [] },
+            { id: 'C1', children: [] },
+            { id: 'C3', children: [] },
+          ],
+        },
+      ],
+    };
+
+    const sampleTargetB = {
+      id: 'A',
+      children: [
+        { id: 'B', children: [{ id: 'B1', children: [] }] },
+        {
+          id: 'C',
+          children: [
+            { id: 'C2', children: [] },
+            { id: 'C1', children: [] },
+            { id: 'C3', children: [] },
+          ],
+        },
+      ],
+    };
+
+    const sampleTargetC = {
+      id: 'A',
+      children: [
+        { id: 'B', children: [{ id: 'B1', children: [] }] },
+        {
+          id: 'C',
+          children: [
+            { id: 'C3', children: [] },
+            { id: 'C1', children: [] },
+            { id: 'C2', children: [] },
+          ],
+        },
+      ],
+    };
+
+    const sampleTargetD = {
+      id: 'A',
+      children: [
+        { id: 'B', children: [{ id: 'B1', children: [] }] },
+        {
+          id: 'C',
+          children: [
+            { id: 'C1', children: [] },
+            { id: 'C3', children: [] },
+            { id: 'C2', children: [] },
+          ],
+        },
+      ],
+    };
+
+    const treeA = treeHandler.parse(JSON.parse(JSON.stringify(sample)));
+
+    treeA.moveToSibling({
+      node: (node) => node.model.id === 'C1',
+      toSibling: (node) => node.model.id === 'C2',
+      at: 'AFTER',
+    });
+
+    expect(treeA.model).toStrictEqual(sampleTargetA);
+
+    const treeB = treeHandler.parse(JSON.parse(JSON.stringify(sample)));
+
+    treeB.moveToSibling({
+      node: (node) => node.model.id === 'C2',
+      toSibling: (node) => node.model.id === 'C1',
+      at: 'BEFORE',
+    });
+
+    expect(treeB.model).toStrictEqual(sampleTargetB);
+
+    const treeC = treeHandler.parse(JSON.parse(JSON.stringify(sample)));
+
+    treeC.moveToSibling({
+      node: (node) => node.model.id === 'C3',
+      toSibling: (node) => node.model.id === 'C1',
+      at: 'BEFORE',
+    });
+
+    expect(treeC.model).toStrictEqual(sampleTargetC);
+
+    const treeD = treeHandler.parse(JSON.parse(JSON.stringify(sample)));
+
+    treeD.moveToSibling({
+      node: (node) => node.model.id === 'C3',
+      toSibling: (node) => node.model.id === 'C1',
+      at: 'AFTER',
+    });
+
+    expect(treeD.model).toStrictEqual(sampleTargetD);
+  });
+
   it('should throw error if the moved node does not exist', () => {
     const modelA = {
       id: 'A',

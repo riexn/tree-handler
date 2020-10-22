@@ -117,13 +117,14 @@ export class TreeNode<T extends TreeModel> {
       throw Error('The root node cannot be a sibling');
     }
 
+    srcNode.delete();
+    // get the index after removing the node
     const siblingIndex = siblingNode.getIndex();
     const srcNewIndex = clamp(
       at === 'BEFORE' ? siblingIndex : siblingIndex + 1,
       0,
       siblingNode.parent.children.length!
     );
-    srcNode.delete();
     siblingNode.parent.addChild(srcNode.model, srcNewIndex);
   }
 
