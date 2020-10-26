@@ -1,9 +1,9 @@
-language: node_js
-node_js:
-  - 'node'
-install:
-  - yarn global add codecov
-script:
-  - yarn test
-  - codecov
-if: branch = main
+# language: node_js
+# node_js:
+#   - 'node'
+# install:
+#   - yarn global add codecov
+# script:
+#   - yarn test
+#   - codecov
+# if: branch = main
