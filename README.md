@@ -1,5 +1,5 @@
 [![NPM](https://nodei.co/npm/tree-handler.png)](https://nodei.co/npm/tree-handler/)\
-[![Build Status](https://travis-ci.org/riexn/tree-handler.svg?branch=main)](https://travis-ci.org/riexn/tree-handler)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/riexn/tree-handler/Build%20CI/main)
 [![codecov](https://codecov.io/gh/riexn/tree-handler/branch/main/graph/badge.svg)](https://codecov.io/gh/riexn/tree-handler)
 [![npm version](https://badge.fury.io/js/tree-handler.svg)](https://badge.fury.io/js/tree-handler)
 
