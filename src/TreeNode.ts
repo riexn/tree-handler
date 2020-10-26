@@ -183,6 +183,20 @@ export class TreeNode<T extends TreeModel> {
     this.children.splice(index, 0, child);
   }
 
+  public flatten(): T[] {
+    const flattenedNodes: T[] = [{ ...this.model }];
+
+    if (this.children.length > 0) {
+      return flattenedNodes.concat(
+        this.children
+          .map((child) => child.flatten())
+          .reduce((a: T[], b: T[]) => a.concat(b), [])
+      );
+    }
+
+    return flattenedNodes;
+  }
+
   public getIndex(): number {
     if (this.parent === undefined) {
       return 0;
