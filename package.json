@@ -1,7 +1,7 @@
 {
   "name": "tree-handler",
   "description": "module to manipulate tree structures",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "author": "riexn <riexn.dev@gmail.com>",
   "license": "MIT",
   "main": "./dist/index.js",
