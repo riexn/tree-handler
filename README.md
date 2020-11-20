@@ -103,6 +103,12 @@ tree.moveToSibling({
 tree.flatten();
 ```
 
+### Loop across every node in the tree
+
+```js
+tree.forEach((node) => {console.log(node)})
+```
+
 # Credits
 
 Heavily inspired by [tree-model](https://www.npmjs.com/package/tree-model)
