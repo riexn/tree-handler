@@ -3,6 +3,7 @@ import {
   TreeModel,
   MoveToSiblingProps,
   MoveUnderParentProps,
+  ForEachFunction,
 } from './types';
 import { clamp } from './utils';
 import treeHandler from './treeHandler';
@@ -202,5 +203,12 @@ export class TreeNode<T extends TreeModel> {
       return 0;
     }
     return this.parent.children.indexOf(this);
+  }
+
+  public forEach(func: ForEachFunction<T>): void {
+    func(this);
+    this.children.map((child) => {
+      child.forEach(func);
+    });
   }
 }
