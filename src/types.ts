@@ -5,8 +5,18 @@ export interface TreeModel {
   [key: string]: any;
 }
 
+type MyInterface<children extends string> = {
+  [prop in children]: string;
+};
+
+const test: MyInterface<'children'> = {};
+
 export interface TreeHandlerConstructor {
   model: TreeModel;
+}
+
+export interface ParseConfigProps {
+  childrenProperty: string;
 }
 
 export interface PredicateFunction<T extends TreeModel> {

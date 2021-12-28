@@ -11,7 +11,8 @@
   ],
   "scripts": {
     "build": "rm -rf ./dist && tsc",
-    "test": "jest --config jestconfig.json",
+    "test": "jest --config jestconfig.json --maxWorkers=1",
+    "test:w": "jest --config jestconfig.json --maxWorkers=1 --watchAll",
     "prepublishOnly": "yarn test",
     "prepare": "yarn build"
   },
