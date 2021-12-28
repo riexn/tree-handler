@@ -5,11 +5,9 @@ export interface TreeModel {
   [key: string]: any;
 }
 
-type MyInterface<children extends string> = {
-  [prop in children]: string;
+export type TreeObject<children extends string> = {
+  [prop in children]: Array<TreeObject<children>>;
 };
-
-const test: MyInterface<'children'> = {};
 
 export interface TreeHandlerConstructor {
   model: TreeModel;
