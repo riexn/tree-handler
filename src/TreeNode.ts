@@ -7,7 +7,7 @@ import {
 } from './types';
 import { clamp } from './utils';
 import treeHandler from './treeHandler';
-import { ParseConfigProps } from '.';
+import { FilterConfig, ModelPredicateFunction, ParseConfigProps } from '.';
 
 export class TreeNode<T extends TreeModel> {
   private _model: T = {} as T;
@@ -74,6 +74,37 @@ export class TreeNode<T extends TreeModel> {
       }
     }
     return result;
+  }
+
+  public filter(
+    func: ModelPredicateFunction,
+    mode?: 'removeChildren'
+  ): TreeNode<T> | undefined;
+
+  public filter(
+    func: ModelPredicateFunction,
+    mode?: 'mergeChildren'
+  ): TreeNode<T>[];
+
+  public filter(
+    func: ModelPredicateFunction,
+    mode: 'mergeChildren' | 'removeChildren' = 'removeChildren'
+  ): TreeNode<T>[] | TreeNode<T> | undefined {
+    if (mode === 'mergeChildren') {
+      const newTrees = _filter(func, this.config.childrenProperty)(this.model);
+      return newTrees.map((tree) => treeHandler.parse(tree, this.config));
+    } else {
+      const newTree = _filterRemoveChildren(
+        func,
+        this.config.childrenProperty,
+        this.model
+      );
+
+      if (newTree) {
+        return treeHandler.parse(newTree, this.config);
+      }
+      return undefined;
+    }
   }
 
   public moveUnderParnet({
@@ -218,3 +249,28 @@ export class TreeNode<T extends TreeModel> {
     });
   }
 }
+
+// keeps the children
+const _filter =
+  (func: ModelPredicateFunction, childrenProperty: string) =>
+  (model: TreeModel): TreeModel[] => {
+    let filteredChidlren: any[] = model[childrenProperty].flatMap(
+      _filter(func, childrenProperty)
+    );
+    return !func(model)
+      ? filteredChidlren
+      : [{ ...model, [childrenProperty]: filteredChidlren }];
+  };
+const _filterRemoveChildren = (
+  func: ModelPredicateFunction,
+  childrenProperty: string,
+  tree: TreeModel
+) => {
+  if (tree[childrenProperty].length > 0) {
+    tree[childrenProperty] = tree[childrenProperty].filter((child: TreeModel) =>
+      Boolean(_filterRemoveChildren(func, childrenProperty, child))
+    );
+  }
+
+  return func(tree) ? tree : undefined;
+};

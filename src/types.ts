@@ -14,12 +14,20 @@ export interface TreeHandlerConstructor {
   model: TreeModel;
 }
 
+export interface FilterConfig {
+  keepChildren: boolean;
+}
+
 export interface ParseConfigProps {
   childrenProperty: string;
 }
 
 export interface PredicateFunction<T extends TreeModel> {
   (node: TreeNode<T>): boolean;
+}
+
+export interface ModelPredicateFunction {
+  (node: TreeModel): boolean;
 }
 
 export interface ForEachFunction<T extends TreeModel> {
