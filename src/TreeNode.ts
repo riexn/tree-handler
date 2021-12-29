@@ -79,12 +79,12 @@ export class TreeNode<T extends TreeModel> {
   public filter(
     func: ModelPredicateFunction,
     mode?: 'removeChildren'
-  ): TreeNode<T>;
+  ): TreeNode<T> | undefined;
 
   public filter(
     func: ModelPredicateFunction,
     mode?: 'mergeChildren'
-  ): TreeNode<T>[] | undefined;
+  ): TreeNode<T>[];
 
   public filter(
     func: ModelPredicateFunction,

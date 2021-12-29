@@ -69,7 +69,7 @@ describe('Filter', () => {
       (node) => node.tag !== 'in progress',
       'mergeChildren'
     );
-    expect(treeResult).toStrictEqual(newTree[0].model);
+    expect(treeResult).toStrictEqual(newTree[0]?.model);
   });
 
   test('Remove children (default mode)', () => {
@@ -135,6 +135,29 @@ describe('Filter', () => {
       childrenProperty: 'subtasks',
     });
     const newTree = tree.filter((node) => node.tag !== 'in progress');
-    expect(treeResult).toStrictEqual(newTree.model);
+    expect(treeResult).toStrictEqual(newTree?.model);
+  });
+
+  test('filter out root', () => {
+    const dataTree = {
+      id: '1',
+      tag: 'pending',
+      subtasks: [
+        {
+          id: '2',
+          tag: 'pending',
+          subtasks: [
+            { id: '4', tag: 'complete', subtasks: [] },
+            { id: '46', tag: 'in progress', subtasks: [] },
+          ],
+        },
+      ],
+    };
+    const tree = treeHandler.parse(dataTree, {
+      childrenProperty: 'subtasks',
+    });
+
+    const newTree = tree.filter((node) => node.tag !== 'pending');
+    expect(newTree).toBe(undefined);
   });
 });
