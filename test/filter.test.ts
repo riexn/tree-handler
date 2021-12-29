@@ -37,11 +37,9 @@ describe('Custom Children Property', () => {
     };
 
     const tree = treeHandler.parse(dataTree, { childrenProperty: 'subtasks' });
-    const newTree = tree.filter(
-      (node) => node.model.tag !== 'in progress',
-      tree
-    );
-    console.log('new tree', JSON.stringify(newTree[0]._model));
+    const newTree = tree.filter((node) => node.model.tag !== 'in progress');
+    // TODO: maybe we need to genrate new trees after we parse them? :)
+    console.log('new tree', newTree);
     expect(tree.model).toBe(dataTree);
   });
 });

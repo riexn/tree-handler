@@ -85,14 +85,8 @@ export class TreeNode<T extends TreeModel> {
   //       : [{ ...node, subtasks: filteredSubtasks }];
   //   };
 
-  public filter(func: PredicateFunction<T>, baseNode: TreeNode<T>): any {
-    const { children, ...node } = baseNode;
-    let filteredChildren: TreeNode<T>[] | TreeNode<T> = children.flatMap(
-      (child) => this.filter(func, child)
-    );
-    return !func(baseNode)
-      ? filteredChildren
-      : [{ ...baseNode, children: filteredChildren }];
+  public filter(func: PredicateFunction<T>): TreeNode<T>[] {
+    return _filter(func)(this);
   }
 
   public moveUnderParnet({
@@ -237,3 +231,10 @@ export class TreeNode<T extends TreeModel> {
     });
   }
 }
+
+const _filter = (func: PredicateFunction<any>) => (node: TreeNode<any>) => {
+  let filteredChidlren: any[] = node.children.flatMap(_filter(func));
+  return !func(node)
+    ? filteredChidlren
+    : [{ ...node, children: filteredChidlren }];
+};
