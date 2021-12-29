@@ -5,6 +5,7 @@ export interface TreeModel {
   [key: string]: any;
 }
 
+// TODO: figure out a way to implement this
 export type TreeObject<children extends string> = {
   [prop in children]: Array<TreeObject<children>>;
 };

@@ -10,7 +10,7 @@ class TreeHandler {
     model: any,
     config: ParseConfigProps = { childrenProperty: 'children' }
   ): TreeNode<T> {
-    const node = new TreeNode(model);
+    const node = new TreeNode(model, config);
 
     // check it if has children
     if (
@@ -19,7 +19,7 @@ class TreeHandler {
     ) {
       // 'parse' each child, adding it as s child for this one
       model[config.childrenProperty].map((child: any) => {
-        this.addNodeToChild(node, this.parse(child));
+        this.addNodeToChild(node, this.parse(child, config));
       });
     } else {
       throw Error('Children property must be of type Array');

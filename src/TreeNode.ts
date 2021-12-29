@@ -13,7 +13,7 @@ export class TreeNode<T extends TreeModel> {
   private _model: T = {} as T;
   parent: TreeNode<T> | undefined = undefined;
   children: TreeNode<T>[] = [];
-  config: ParseConfigProps = { childrenProperty: 'children' };
+  config: ParseConfigProps;
   constructor(
     model: T,
     config: ParseConfigProps = { childrenProperty: 'children' }
@@ -25,7 +25,7 @@ export class TreeNode<T extends TreeModel> {
     this.config = config;
   }
 
-  set model(newModel: T) {
+  set model(newModel: any) {
     // ommit changing the children if there is values in the model already
     const isNew = Object.keys(this._model).length === 0;
     if (isNew) {
@@ -150,7 +150,7 @@ export class TreeNode<T extends TreeModel> {
     return this;
   }
 
-  public addChild(child: TreeModel, index?: number): any;
+  public addChild(child: any, index?: number): any;
 
   public addChild(child: TreeNode<T>, index?: number): any;
 
@@ -161,8 +161,8 @@ export class TreeNode<T extends TreeModel> {
       } else {
         this._addAsLastChild(child);
       }
-    } else if (child.children instanceof Array) {
-      const node = treeHandler.parse(child);
+    } else if (child[this.config.childrenProperty] instanceof Array) {
+      const node = treeHandler.parse(child, this.config);
       this.addChild(node, index);
     } else {
       throw Error('node must be of type object');
