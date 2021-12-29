@@ -7,26 +7,32 @@ import {
 } from './types';
 import { clamp } from './utils';
 import treeHandler from './treeHandler';
+import { ParseConfigProps } from '.';
 
 export class TreeNode<T extends TreeModel> {
   private _model: T = {} as T;
   parent: TreeNode<T> | undefined = undefined;
   children: TreeNode<T>[] = [];
-  constructor(model: T) {
-    if (!model.children) {
-      model.children = [];
+  config: ParseConfigProps;
+  constructor(
+    model: T,
+    config: ParseConfigProps = { childrenProperty: 'children' }
+  ) {
+    if (!model[config.childrenProperty]) {
+      (model as any)[config.childrenProperty] = [];
     }
     this.model = model;
+    this.config = config;
   }
 
-  set model(newModel: T) {
+  set model(newModel: any) {
     // ommit changing the children if there is values in the model already
     const isNew = Object.keys(this._model).length === 0;
     if (isNew) {
       this._model = newModel as T;
     } else {
       const updatedModel: any = { ...newModel };
-      delete updatedModel.children;
+      delete updatedModel[this.config.childrenProperty];
       Object.assign(this._model, updatedModel);
     }
   }
@@ -133,7 +139,7 @@ export class TreeNode<T extends TreeModel> {
     if (this.parent) {
       const indexOfChild: number = this.parent.children.indexOf(this);
       this.parent.children.splice(indexOfChild, 1);
-      this.parent.model.children.splice(indexOfChild, 1);
+      this.parent.model[this.config.childrenProperty].splice(indexOfChild, 1);
       // update every parent of this node to have the new shape
       // send model to parent
       // parent will find the index of the child, remove it, then replace it with the updated one
@@ -144,7 +150,7 @@ export class TreeNode<T extends TreeModel> {
     return this;
   }
 
-  public addChild(child: TreeModel, index?: number): any;
+  public addChild(child: any, index?: number): any;
 
   public addChild(child: TreeNode<T>, index?: number): any;
 
@@ -155,8 +161,8 @@ export class TreeNode<T extends TreeModel> {
       } else {
         this._addAsLastChild(child);
       }
-    } else if (child.children instanceof Array) {
-      const node = treeHandler.parse(child);
+    } else if (child[this.config.childrenProperty] instanceof Array) {
+      const node = treeHandler.parse(child, this.config);
       this.addChild(node, index);
     } else {
       throw Error('node must be of type object');
@@ -169,7 +175,7 @@ export class TreeNode<T extends TreeModel> {
 
   private _addAsLastChild(child: TreeNode<T>): any {
     child.parent = this;
-    this.model.children.push(child.model);
+    this.model[this.config.childrenProperty].push(child.model);
     this.children.push(child);
   }
 
@@ -180,7 +186,7 @@ export class TreeNode<T extends TreeModel> {
       throw Error("the specified index is outside the node's children range");
     }
     child.parent = this;
-    this.model.children.splice(index, 0, child.model);
+    this.model[this.config.childrenProperty].splice(index, 0, child.model);
     this.children.splice(index, 0, child);
   }
 

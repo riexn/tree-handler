@@ -1,18 +1,25 @@
 import { PredicateFunction, TreeHandlerConstructor, TreeModel } from './types';
 import { TreeNode } from './TreeNode';
+import { ParseConfigProps } from '.';
 
 // Tree Parser
 class TreeHandler {
   constructor() {}
 
-  parse<T extends TreeModel>(model: T): TreeNode<T> {
-    const node = new TreeNode(model);
+  parse<T extends TreeModel>(
+    model: any,
+    config: ParseConfigProps = { childrenProperty: 'children' }
+  ): TreeNode<T> {
+    const node = new TreeNode(model, config);
 
     // check it if has children
-    if (model.children && Array.isArray(model.children)) {
+    if (
+      model[config.childrenProperty] &&
+      Array.isArray(model[config.childrenProperty])
+    ) {
       // 'parse' each child, adding it as s child for this one
-      model.children.map((child) => {
-        this.addNodeToChild(node, this.parse(child));
+      model[config.childrenProperty].map((child: any) => {
+        this.addNodeToChild(node, this.parse(child, config));
       });
     } else {
       throw Error('Children property must be of type Array');

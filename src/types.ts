@@ -5,8 +5,17 @@ export interface TreeModel {
   [key: string]: any;
 }
 
+// TODO: figure out a way to implement this
+export type TreeObject<children extends string> = {
+  [prop in children]: Array<TreeObject<children>>;
+};
+
 export interface TreeHandlerConstructor {
   model: TreeModel;
+}
+
+export interface ParseConfigProps {
+  childrenProperty: string;
 }
 
 export interface PredicateFunction<T extends TreeModel> {
