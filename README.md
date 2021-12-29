@@ -1,6 +1,5 @@
 [![NPM](https://nodei.co/npm/tree-handler.png)](https://nodei.co/npm/tree-handler/)\
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/riexn/tree-handler/Build%20CI/main)
-[![CodeFactor](https://www.codefactor.io/repository/github/riexn/tree-handler/badge)](https://www.codefactor.io/repository/github/riexn/tree-handler)
 [![codecov](https://codecov.io/gh/riexn/tree-handler/branch/main/graph/badge.svg)](https://codecov.io/gh/riexn/tree-handler)
 [![Known Vulnerabilities](https://snyk.io/test/github/riexn/tree-handler/badge.svg?targetFile=package.json)](https://snyk.io/test/github/riexn/tree-handler?targetFile=package.json)
 [![npm version](https://badge.fury.io/js/tree-handler.svg)](https://badge.fury.io/js/tree-handler)
@@ -106,7 +105,9 @@ tree.flatten();
 ### Loop across every node in the tree
 
 ```js
-tree.forEach((node) => {console.log(node)})
+tree.forEach((node) => {
+  console.log(node);
+});
 ```
 
 # Credits
