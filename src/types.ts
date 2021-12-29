@@ -14,6 +14,10 @@ export interface TreeHandlerConstructor {
   model: TreeModel;
 }
 
+export interface FilterConfig {
+  keepChildren: boolean;
+}
+
 export interface ParseConfigProps {
   childrenProperty: string;
 }

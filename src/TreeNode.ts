@@ -7,7 +7,7 @@ import {
 } from './types';
 import { clamp } from './utils';
 import treeHandler from './treeHandler';
-import { ParseConfigProps } from '.';
+import { FilterConfig, ParseConfigProps } from '.';
 
 export class TreeNode<T extends TreeModel> {
   private _model: T = {} as T;
@@ -74,6 +74,25 @@ export class TreeNode<T extends TreeModel> {
       }
     }
     return result;
+  }
+
+  // filter =
+  //   (tag: string) =>
+  //   ({ subtasks, ...node }: TreeNode) => {
+  //     let filteredSubtasks: any[] = subtasks.flatMap(filter(tag));
+  //     return node.tag === tag
+  //       ? filteredSubtasks
+  //       : [{ ...node, subtasks: filteredSubtasks }];
+  //   };
+
+  public filter(func: PredicateFunction<T>, baseNode: TreeNode<T>): any {
+    const { children, ...node } = baseNode;
+    let filteredChildren: TreeNode<T>[] | TreeNode<T> = children.flatMap(
+      (child) => this.filter(func, child)
+    );
+    return !func(baseNode)
+      ? filteredChildren
+      : [{ ...baseNode, children: filteredChildren }];
   }
 
   public moveUnderParnet({
