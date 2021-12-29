@@ -24,6 +24,20 @@ const model = {
 const tree = treeHandler.parse(model);
 ```
 
+#### Parse with a custom children property
+
+```js
+import treeHandler from 'tree-handler';
+const model = {
+  id: 'root',
+  subtasks: [
+    { id: 'A', subtasks: [] },
+    { id: 'B', subtasks: [] },
+  ],
+};
+const tree = treeHandler.parse(model, { childrenProperty: 'subtasks' });
+```
+
 ### Find a single node that matches a criteria
 
 ```js
@@ -94,6 +108,169 @@ tree.moveToSibling({
   toSibling: (node) => node.model.id === 'C2',
   at: 'BEFORE', // options: BEFORE, AFTER
 });
+```
+
+### Filter Tree Nodes
+
+the filter function will return to us **new** TreeNode classes based on the filter conditions. There are two modes to filter a tree structure.
+
+#### Remove Children Mode (Default)
+
+this one is the "expected" way of filtering a tree structure's nodes. If a node should be filtered out, then that node along its children will be removed.
+
+```js
+const dataTree = {
+  id: '1',
+  tag: 'pending',
+  subtasks: [
+    {
+      id: '2',
+      tag: 'pending',
+      subtasks: [
+        { id: '4', tag: 'complete', subtasks: [] },
+        { id: '46', tag: 'in progress', subtasks: [] },
+      ],
+    },
+    {
+      id: '3',
+      tag: 'in progress',
+      subtasks: [
+        {
+          id: '4',
+          tag: 'pending',
+          subtasks: [
+            {
+              id: '6',
+              tag: 'complete',
+              subtasks: [
+                {
+                  id: '10',
+                  tag: 'pending',
+                  subtasks: [{ id: '11', tag: 'complete', subtasks: [] }],
+                },
+              ],
+            },
+            {
+              id: '7',
+              tag: 'complete',
+              subtasks: [{ id: '74', tag: 'in progress', subtasks: [] }],
+            },
+          ],
+        },
+        { id: '5', tag: 'pending', subtasks: [] },
+      ],
+    },
+    { id: '4', tag: 'complete', subtasks: [] },
+  ],
+};
+
+const tree = treeHandler.parse(dataTree, {
+  childrenProperty: 'subtasks',
+});
+const newTree = tree.filter((node) => node.tag !== 'in progress');
+
+console.log(newTree);
+```
+
+result:
+
+```js
+{
+  id: '1',
+  tag: 'pending',
+  subtasks: [
+    {
+      id: '2',
+      tag: 'pending',
+      subtasks: [{ id: '4', tag: 'complete', subtasks: [] }],
+    },
+    { id: '4', tag: 'complete', subtasks: [] },
+  ],
+};
+
+```
+
+#### Merge Children Mode
+
+this filtering method is unique. What it does is that it filtering out each node indiviually. Meaning if a node should be filtered out, and if it has children that should **not** be filtered out, then those children will be moved to the same depth level and starting index number of their parent.
+
+```js
+const dataTree = {
+  id: '1',
+  tag: 'pending',
+  subtasks: [
+    { id: '2', tag: 'pending', subtasks: [] },
+    {
+      id: '3',
+      tag: 'in progress',
+      subtasks: [
+        {
+          id: '4',
+          tag: 'pending',
+          subtasks: [
+            {
+              id: '6',
+              tag: 'complete',
+              subtasks: [
+                {
+                  id: '10',
+                  tag: 'pending',
+                  subtasks: [{ id: '10', tag: 'complete', subtasks: [] }],
+                },
+              ],
+            },
+            { id: '7', tag: 'complete', subtasks: [] },
+          ],
+        },
+        { id: '5', tag: 'pending', subtasks: [] },
+      ],
+    },
+    { id: '4', tag: 'complete', subtasks: [] },
+  ],
+};
+
+const treeResult =
+const tree = treeHandler.parse(dataTree, { childrenProperty: 'subtasks' });
+const newTrees = tree.filter(
+  (node) => node.tag !== 'in progress',
+  'mergeChildren'
+);
+
+console.log(newTrees)
+```
+
+result:
+
+```js
+[
+  {
+    id: '1',
+    tag: 'pending',
+    subtasks: [
+      { id: '2', tag: 'pending', subtasks: [] },
+      {
+        id: '4',
+        tag: 'pending',
+        subtasks: [
+          {
+            id: '6',
+            tag: 'complete',
+            subtasks: [
+              {
+                id: '10',
+                tag: 'pending',
+                subtasks: [{ id: '10', tag: 'complete', subtasks: [] }],
+              },
+            ],
+          },
+          { id: '7', tag: 'complete', subtasks: [] },
+        ],
+      },
+      { id: '5', tag: 'pending', subtasks: [] },
+      { id: '4', tag: 'complete', subtasks: [] },
+    ],
+  },
+];
 ```
 
 ### Flatten tree to array of nodes
